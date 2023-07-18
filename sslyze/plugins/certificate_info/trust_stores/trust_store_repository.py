@@ -27,6 +27,9 @@ class TrustStoreEnum(Enum):
 
 def _get_script_dir(follow_symlinks: bool = True) -> Path:
     # Getting the path to the trust stores is tricky due to subtle differences on OS X, Linux and Windows
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS)
+    
     if getattr(sys, "frozen", False):
         # py2exe, PyInstaller, cx_Freeze
         path = Path(sys.executable).absolute()
